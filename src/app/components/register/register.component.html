@@ -1,0 +1,188 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="registrationCard">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="firstname">Firstname</label>
+          <input
+            id="firstname"
+            type="firstname"
+            formControlName="firstname"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['firstname'].touched &&
+                rfControls['firstname'].errors
+            }"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              rfControls['firstname'].touched && rfControls['firstname'].errors
+            "
+          >
+            <small *ngIf="rfControls['firstname'].errors['required']"
+              >This field is required.</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lastname">Lastname</label>
+          <input
+            id="lastname"
+            type="lastname"
+            formControlName="lastname"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['lastname'].touched && rfControls['lastname'].errors
+            }"
+          />
+          <div class="invalid-feedback">
+            <small
+              *ngIf="
+                rfControls['lastname'].touched && rfControls['lastname'].errors
+              "
+              >This field is required.</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="loginId">LoginId</label>
+          <input
+            id="loginId"
+            type="loginId"
+            formControlName="loginId"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['loginId'].touched && rfControls['loginId'].errors
+            }"
+          />
+          <div class="invalid-feedback">
+            <small
+              *ngIf="
+                rfControls['loginId'].touched && rfControls['loginId'].errors
+              "
+              >This field is required.</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['email'].touched && rfControls['email'].errors,
+              'is-valid': rfControls['email'].valid
+            }"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="rfControls['email'].touched && rfControls['email'].errors"
+          >
+            <small *ngIf="rfControls['email'].errors['required']"
+              >Email is required.</small
+            >
+            <small *ngIf="rfControls['email'].errors['pattern']"
+              >Enter valid Email Id.</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['password'].touched && rfControls['password'].errors
+            }"
+          />
+          <div class="invalid-feedback">
+            <small
+              *ngIf="
+                rfControls['password'].touched && rfControls['password'].errors
+              "
+              >This field is required.</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            class="form-control"
+            (keyup)="hello($event)"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['confirmPassword'].touched &&
+                rfControls['confirmPassword'].errors
+            }"
+          />
+          <div class="invalid-feedback">
+            <small
+              *ngIf="
+                rfControls['confirmPassword'].touched &&
+                rfControls['confirmPassword'].errors &&
+                rfControls['confirmPassword'].errors['required']
+              "
+              >This field is required.</small
+            >
+            <!-- <small
+              *ngIf="rfControls['confirmPassword']?.errors['passwordMismatch']"
+              >Password doesn't matched.</small
+            > -->
+            <small
+              *ngIf="
+                rfControls['confirmPassword'].value !==
+                rfControls['password'].value
+              "
+              >Password doesn't matched.</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="contactNumber">ContactNumber</label>
+          <input
+            id="contactNumber"
+            type="tel"
+            formControlName="contactNumber"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                rfControls['contactNumber'].touched &&
+                rfControls['contactNumber'].errors
+            }"
+          />
+          <div class="invalid-feedback">
+            <small
+              *ngIf="
+                rfControls['contactNumber'].touched &&
+                rfControls['contactNumber'].errors
+              "
+              >This field is required.</small
+            >
+          </div>
+        </div>
+        <div class="form-group pt-2">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="registrationForm.invalid"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

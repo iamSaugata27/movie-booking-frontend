@@ -12,7 +12,9 @@ export class HeaderComponent implements OnInit {
   ngbNav!: NgbNav;
 
   links = [
-    { title: 'login', route: 'login' }
+    { title: 'Movies', route: 'movies' },
+    { title: 'login', route: 'login' },
+    { title: 'Register', route: 'register' }
   ];
   constructor(private route: ActivatedRoute) { }
   ngOnInit(): void {
