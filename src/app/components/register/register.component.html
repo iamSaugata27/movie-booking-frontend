@@ -6,7 +6,7 @@
           <label for="firstname">Firstname</label>
           <input
             id="firstname"
-            type="firstname"
+            type="text"
             formControlName="firstname"
             class="form-control"
             [ngClass]="{
@@ -22,7 +22,7 @@
             "
           >
             <small *ngIf="rfControls['firstname'].errors['required']"
-              >This field is required.</small
+              >This field is required!</small
             >
           </div>
         </div>
@@ -30,7 +30,7 @@
           <label for="lastname">Lastname</label>
           <input
             id="lastname"
-            type="lastname"
+            type="text"
             formControlName="lastname"
             class="form-control"
             [ngClass]="{
@@ -43,7 +43,7 @@
               *ngIf="
                 rfControls['lastname'].touched && rfControls['lastname'].errors
               "
-              >This field is required.</small
+              >This field is required!</small
             >
           </div>
         </div>
@@ -51,9 +51,10 @@
           <label for="loginId">LoginId</label>
           <input
             id="loginId"
-            type="loginId"
+            type="text"
             formControlName="loginId"
             class="form-control"
+            placeholder="LoginId Should be unique and is required to login"
             [ngClass]="{
               'is-invalid':
                 rfControls['loginId'].touched && rfControls['loginId'].errors
@@ -64,7 +65,7 @@
               *ngIf="
                 rfControls['loginId'].touched && rfControls['loginId'].errors
               "
-              >This field is required.</small
+              >This field is required!</small
             >
           </div>
         </div>
@@ -105,13 +106,18 @@
                 rfControls['password'].touched && rfControls['password'].errors
             }"
           />
-          <div class="invalid-feedback">
-            <small
-              *ngIf="
-                rfControls['password'].touched && rfControls['password'].errors
-              "
-              >This field is required.</small
-            >
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              rfControls['password'].touched && rfControls['password'].errors
+            "
+          >
+            <small *ngIf="rfControls['password'].errors['required']">
+              This field is required!
+            </small>
+            <small *ngIf="rfControls['password'].errors['minlength']">
+              Password should contains atleast 6 characters!
+            </small>
           </div>
         </div>
         <div class="form-group">
@@ -121,33 +127,31 @@
             type="password"
             formControlName="confirmPassword"
             class="form-control"
-            (keyup)="hello($event)"
+            (click)="passwordVal()"
             [ngClass]="{
               'is-invalid':
                 rfControls['confirmPassword'].touched &&
                 rfControls['confirmPassword'].errors
             }"
           />
-          <div class="invalid-feedback">
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              rfControls['confirmPassword'].touched &&
+              rfControls['confirmPassword'].errors
+            "
+          >
+            <small *ngIf="rfControls['confirmPassword'].errors['required']">
+              This field is required!
+            </small>
             <small
               *ngIf="
-                rfControls['confirmPassword'].touched &&
-                rfControls['confirmPassword'].errors &&
-                rfControls['confirmPassword'].errors['required']
+                !rfControls['confirmPassword'].errors['required'] &&
+                rfControls['confirmPassword'].errors['passwordMismatch']
               "
-              >This field is required.</small
             >
-            <!-- <small
-              *ngIf="rfControls['confirmPassword']?.errors['passwordMismatch']"
-              >Password doesn't matched.</small
-            > -->
-            <small
-              *ngIf="
-                rfControls['confirmPassword'].value !==
-                rfControls['password'].value
-              "
-              >Password doesn't matched.</small
-            >
+              Password doesn't matched!
+            </small>
           </div>
         </div>
         <div class="form-group">
@@ -163,13 +167,26 @@
                 rfControls['contactNumber'].errors
             }"
           />
-          <div class="invalid-feedback">
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              rfControls['contactNumber'].touched &&
+              rfControls['contactNumber'].errors
+            "
+          >
+            <small *ngIf="rfControls['contactNumber'].errors['required']"
+              >This field is required!</small
+            >
+            <small *ngIf="rfControls['contactNumber'].errors['pattern']"
+              >Contact Number only contains numeric digits!</small
+            >
             <small
               *ngIf="
-                rfControls['contactNumber'].touched &&
-                rfControls['contactNumber'].errors
+                rfControls['contactNumber'].errors[
+                  'contactNumberLengthUnmatched'
+                ]
               "
-              >This field is required.</small
+              >Contact Number should contains 10 numeric digits!</small
             >
           </div>
         </div>

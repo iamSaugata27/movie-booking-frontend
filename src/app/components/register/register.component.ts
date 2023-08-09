@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormControlOptions, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormControlOptions, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/services/auth.service';
@@ -22,8 +22,7 @@ interface registrationData {
 export class RegisterComponent implements OnInit {
   registrationForm!: FormGroup;
   error!: string;
-  passmodel!: string;
-  cnfrmpassmodel!: string;
+  passVal!: string;
 
   constructor(private authService: AuthService, config: NgbModalConfig, private modalService: NgbModal, private router: Router) {
     config.backdrop = 'static';
@@ -37,45 +36,27 @@ export class RegisterComponent implements OnInit {
       'loginId': new FormControl('', [Validators.required]),
       'email': new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]),
       'password': new FormControl('', [Validators.required, Validators.minLength(6)]),
-      'confirmPassword': new FormControl('', [Validators.required]),
-      'contactNumber': new FormControl(null, [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]+$')])
+      'confirmPassword': new FormControl('', [Validators.required, this.passwordMatcher.bind(this)]),
+      'contactNumber': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]+$'), this.contactNumberValidation])
     });
     this.error = '';
   }
 
-  MatchPassword() {
-
-    //const passwordControl = this.rfControls['password'];
-    const password = this?.passmodel;
-    const confirmPasswordControl = this?.cnfrmpassmodel;
-
-    // if (!passwordControl || !confirmPasswordControl) {
-    //   return null;
-    // }
-
-    // if (confirmPasswordControl.errors && !confirmPasswordControl.errors['passwordMismatch']) {
-    //   return null;
-    // }
-
-    // if (passwordControl.value !== confirmPasswordControl.value) {
-    //   // confirmPasswordControl.setErrors({ passwordMismatch: true });
-    //   return { passwordMismatch: true };
-    // } else {
-    //   // confirmPasswordControl.setErrors(null);
-    //   return null;
-    // }
-    if (password !== confirmPasswordControl) {
+  private passwordMatcher(control: FormControl): { [key: string]: boolean } | null {
+    if (this.passVal?.length >= 6 && control.value !== this.passVal)
       return { passwordMismatch: true };
-    } else {
-      return { passwordMismatch: true };
-    }
+    return null;
   }
 
-  hello(event: any) {
-    console.log(event)
-    console.log("***cnfrm pass--", this.rfControls['confirmPassword'].value)
-    console.log("***pass--", this.rfControls['password'].value)
+  passwordVal() {
     console.log(this.registrationForm);
+    this.passVal = this.rfControls['password'].value;
+  }
+
+  private contactNumberValidation(control: FormControl): { [key: string]: boolean } | null {
+    if (control.value?.length > 0 && control.value?.length !== 10 && /^\d+$/.test(control.value))
+      return { contactNumberLengthUnmatched: true }
+    return null;
   }
 
   get rfControls() {
