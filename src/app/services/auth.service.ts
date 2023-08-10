@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { RegistrationData, RegistrationRespData } from '../components/register/register.component';
 
 export interface LoginDetails {
   loginId: string,
@@ -23,5 +24,9 @@ export class AuthService {
 
   login(loginDetails: LoginDetails): Observable<LoginResponse> {
     return this.http.post<LoginResponse>("http://localhost:8000/api/users/login", loginDetails);
+  }
+
+  register(registrationDetails: RegistrationData): Observable<RegistrationRespData> {
+    return this.http.post<RegistrationRespData>("http://localhost:8000/api/users/registration", registrationDetails);
   }
 }

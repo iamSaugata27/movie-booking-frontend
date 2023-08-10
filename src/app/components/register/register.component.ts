@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormControlOptions, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/services/auth.service';
 
-interface registrationData {
+export interface RegistrationData {
   "firstname": string,
   "lastname": string,
   "loginId": string,
@@ -12,6 +12,11 @@ interface registrationData {
   "password": string,
   "confirmPassword": string,
   "contactNumber": number
+}
+
+export interface RegistrationRespData {
+  message: string,
+  loginId: string
 }
 
 @Component({
@@ -23,6 +28,7 @@ export class RegisterComponent implements OnInit {
   registrationForm!: FormGroup;
   error!: string;
   passVal!: string;
+  respRegisterData!: RegistrationRespData;
 
   constructor(private authService: AuthService, config: NgbModalConfig, private modalService: NgbModal, private router: Router) {
     config.backdrop = 'static';
@@ -63,7 +69,28 @@ export class RegisterComponent implements OnInit {
     return this.registrationForm.controls;
   }
 
-  onSubmit() {
+  onSubmit(content: any) {
     console.log(this.registrationForm);
+    const registrationDetails: RegistrationData = this.registrationForm.value;
+    //const { firstname, lastname, loginId, email, password, confirmPassword, contactNumber }: RegistrationData = this.registrationForm.value;
+    console.log(registrationDetails);
+    this.authService.register(registrationDetails).subscribe({
+      next: respData => {
+        console.log(respData);
+        this.error = '';
+        this.respRegisterData = respData;
+        // this.router.navigate(['/login']);
+      },
+      error: errResp => {
+        console.log(errResp);
+        this.error = errResp.error.errors;
+      },
+    });
+    this.modalService.open(content);
+  }
+
+  regSuccess() {
+
+    this.router.navigate(['/login']);
   }
 }
