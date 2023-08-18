@@ -30,27 +30,57 @@
       </p>
     </ng-template>
   </li> -->
-  <li ngbDropdown class="nav-item" role="presentation">
-    <button type="button" class="nav-link" ngbDropdownToggle>Dropdown</button>
+  <li *ngIf="isLoggedIn" ngbDropdown class="nav-item" role="presentation">
+    <button type="button" class="nav-link" ngbDropdownToggle>
+      Welcome {{ loginId }}
+    </button>
     <div ngbDropdownMenu>
-      <button ngbDropdownItem>Action</button>
+      <a
+        ngbDropdownItem
+        [routerLink]="addMovie"
+        [routerLinkActive]="['active']"
+        *ngIf="role == 'admin'"
+        >Add Movie Poster</a
+      >
       <button ngbDropdownItem>Another action</button>
       <button ngbDropdownItem>Something else here</button>
       <div class="dropdown-divider"></div>
-      <button ngbDropdownItem>Separated link</button>
+      <button ngbDropdownItem (click)="loggingOut()">Logout</button>
     </div>
   </li>
-  <li [ngbNavItem]="link.route" *ngFor="let link of links">
-    <a ngbNavLink [routerLink]="link.route">{{ link.title }}</a>
-  </li>
+  <!-- <li [ngbNavItem]="movies">
+    <a ngbNavLink [routerLink]="movies" [routerLinkActive]="['active']"
+      >Movies</a
+    >
+  </li> -->
+  <ng-container *ngFor="let link of links">
+    <li [ngbNavItem]="link.route" *ngIf="!link.afterLoginDisable">
+      <a
+        ngbNavLink
+        [routerLink]="link.route"
+        [routerLinkActive]="['active']"
+        (click)="searchMovieQueryReset()"
+        >{{ link.title }}</a
+      >
+    </li>
+  </ng-container>
+
   <form class="d-flex ms-auto" role="search">
     <input
       class="form-control me-2"
       type="search"
       placeholder="Search Movies"
       aria-label="Search"
+      name="searchVal"
+      [(ngModel)]="searchValue"
     />
-    <button class="btn btn-outline-success" type="submit">Search</button>
+    <button
+      class="btn btn-outline-success"
+      type="button"
+      (click)="searchMovie()"
+    >
+      Search
+    </button>
   </form>
 </ul>
 

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Route, Router } from '@angular/router';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService, LoginDetails } from 'src/app/services/auth.service';
+import { AuthService, LoginDetails, User } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +12,7 @@ import { AuthService, LoginDetails } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   error!: string;
+
 
   constructor(private authService: AuthService, config: NgbModalConfig, private modalService: NgbModal, private router: Router) {
     config.backdrop = 'static';
@@ -34,6 +35,9 @@ export class LoginComponent implements OnInit {
         console.log(respData);
         localStorage.setItem('role', respData.role);
         localStorage.setItem('token', respData.token);
+        const user: User = { isLoggedIn: true, loginId: this.loginForm.value.loginId, role: respData.role };
+        this.authService.user.next(user);
+        this.authService.loggedIn(true);
         this.router.navigate(['/movies']);
       },
       error: errResp => {

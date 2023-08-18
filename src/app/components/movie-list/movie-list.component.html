@@ -1,22 +1,80 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Movie</th>
-      <th scope="col">Theatre</th>
-      <th scope="col">Capacity</th>
-      <th scope="col">SeatsBooked</th>
-      <th scope="col">BookingStatus</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let movie of movies; index as i">
-      <th scope="row">{{ i + 1 }}</th>
-      <td>{{ movie.movieName }}</td>
-      <td>{{ movie.theatreName }}</td>
-      <td>{{ movie.noOfTickets | number }}</td>
-      <td>{{ movie.seatNumber.length | number }}</td>
-      <td>{{ movie.status }}</td>
-    </tr>
-  </tbody>
-</table>
+<div *ngIf="isLoading" style="text-align: center">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!isLoading">
+  <p
+    *ngIf="isMovieSearched && movies?.length"
+    style="color: green; padding-left: 84px"
+  >
+    Your searched results consist moviename with
+    <b style="font-style: italic">{{ searchKey }}</b> keyword.
+  </p>
+  <h3
+    *ngIf="isMovieSearched && movies?.length === 0"
+    style="color: red; padding-left: 84px"
+  >
+    No movies matched with your search results!
+  </h3>
+  <table class="table table-striped" *ngIf="movies?.length">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Movie</th>
+        <th scope="col">Theatre</th>
+        <th scope="col">Capacity</th>
+        <th scope="col">SeatsBooked</th>
+        <th scope="col">Release On</th>
+        <th scope="col">Book Ticket</th>
+        <th scope="col">BookingStatus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let movie of movies; index as i">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ movie.movieName }}</td>
+        <td>{{ movie.theatreName }}</td>
+        <td>{{ movie.noOfTickets | number }}</td>
+        <td>{{ movie.seatNumber.length | number }}</td>
+        <td>{{ movie.releaseDate | date : "MMMM dd" }}</td>
+        <td>
+          <a
+            class="btn btn-outline-success"
+            [routerLink]="[movie.movieName, 'book-ticket']"
+            [routerLinkActive]="['active']"
+            (click)="
+              passToBookTicket(
+                movie.movieName,
+                movie.theatreName,
+                movie.noOfTickets,
+                movie.releaseDate,
+                content
+              )
+            "
+          >
+            Book Now
+          </a>
+        </td>
+        <td>{{ movie.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Hi there!</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p>Dear Guest, You have to login first to book a ticket.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Ok')">
+      Ok
+    </button>
+  </div>
+</ng-template>

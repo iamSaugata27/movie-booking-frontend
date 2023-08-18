@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService } from 'src/app/services/auth.service';
+import { NgbActiveModal, NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService, User } from 'src/app/services/auth.service';
 
 export interface RegistrationData {
   "firstname": string,
@@ -22,15 +22,18 @@ export interface RegistrationRespData {
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  providers: [NgbActiveModal]
 })
 export class RegisterComponent implements OnInit {
   registrationForm!: FormGroup;
   error!: string;
   passVal!: string;
   respRegisterData!: RegistrationRespData;
+  isLoading!: boolean;
+  // modalRef!: NgbActiveModal;
 
-  constructor(private authService: AuthService, config: NgbModalConfig, private modalService: NgbModal, private router: Router) {
+  constructor(private authService: AuthService, config: NgbModalConfig, private modalService: NgbModal, private modalRef: NgbActiveModal, private router: Router) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
@@ -46,6 +49,7 @@ export class RegisterComponent implements OnInit {
       'contactNumber': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]+$'), this.contactNumberValidation])
     });
     this.error = '';
+    this.isLoading = false;
   }
 
   private passwordMatcher(control: FormControl): { [key: string]: boolean } | null {
@@ -71,6 +75,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(content: any) {
     console.log(this.registrationForm);
+    this.isLoading = true;
     const registrationDetails: RegistrationData = this.registrationForm.value;
     //const { firstname, lastname, loginId, email, password, confirmPassword, contactNumber }: RegistrationData = this.registrationForm.value;
     console.log(registrationDetails);
@@ -79,18 +84,20 @@ export class RegisterComponent implements OnInit {
         console.log(respData);
         this.error = '';
         this.respRegisterData = respData;
+        this.isLoading = false;
         // this.router.navigate(['/login']);
       },
       error: errResp => {
         console.log(errResp);
         this.error = errResp.error.errors;
+        this.isLoading = false;
       },
     });
-    this.modalService.open(content);
+    this.modalRef = this.modalService.open(content, { centered: true });
   }
 
   regSuccess() {
-
+    this.modalRef.close();
     this.router.navigate(['/login']);
   }
 }

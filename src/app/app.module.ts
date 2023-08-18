@@ -4,12 +4,15 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
 import { MovieListComponent } from './components/movie-list/movie-list.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AddMovieComponent } from './components/add-movie/add-movie.component';
+import { BookTicketComponent } from './components/book-ticket/book-ticket.component';
 
 @NgModule({
   declarations: [
@@ -17,14 +20,19 @@ import { RegisterComponent } from './components/register/register.component';
     HeaderComponent,
     LoginComponent,
     MovieListComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoadingSpinnerComponent,
+    AddMovieComponent,
+    BookTicketComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    NgbDatepickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

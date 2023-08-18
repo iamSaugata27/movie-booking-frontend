@@ -1,6 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService, User } from 'src/app/services/auth.service';
+import { MoviesService } from 'src/app/services/movies.service';
 
 @Component({
   selector: 'app-header',
@@ -10,13 +13,19 @@ import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 export class HeaderComponent implements OnInit {
   @ViewChild(NgbNav, { static: true })
   ngbNav!: NgbNav;
+  token!: boolean;
+  isLoggedIn!: boolean;
+  role!: string | null;
+  loginId!: string | null;
+  searchValue!: string;
+  addMovie = "add-movie";
 
   links = [
-    { title: 'Movies', route: 'movies' },
-    { title: 'login', route: 'login' },
-    { title: 'Register', route: 'register' }
+    { title: 'Movies', route: 'movies', afterLoginDisable: false },
+    { title: 'login', route: 'login', afterLoginDisable: false },
+    { title: 'Register', route: 'register', afterLoginDisable: false }
   ];
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private movieService: MoviesService) { }
   ngOnInit(): void {
     this.route.firstChild?.url.subscribe((url) => {
       // get url path
@@ -24,5 +33,45 @@ export class HeaderComponent implements OnInit {
       // select/set active tab
       this.ngbNav.select(urlPath);
     });
+    // this.token = localStorage.getItem('token');
+    // this.authService.isLoggedIn.subscribe((loggedIn: boolean) => {
+    //   this.token = loggedIn;
+    //   console.log(this.token);
+    // })
+    this.authService.user.subscribe((userData: User) => {
+      this.isLoggedIn = userData.isLoggedIn;
+      this.loginId = userData.loginId;
+      this.role = userData.role;
+      if (this.isLoggedIn) {
+        for (let link of this.links) {
+          if (link.title !== 'Movies')
+            link.afterLoginDisable = true;
+        }
+      }
+    })
+  }
+
+  loggingOut() {
+    this.authService.logout();
+    for (let link of this.links) {
+      if (link.afterLoginDisable)
+        link.afterLoginDisable = false;
+    }
+    this.router.navigate(['/login']);
+  }
+
+  searchMovie() {
+    console.log(this.searchValue);
+    this.router.navigate(['/movies'], {
+      relativeTo: this.route,
+      queryParams: { searchKey: this.searchValue },
+      queryParamsHandling: 'merge'
+    });
+    this.movieService.movieSearch.next({ isMovieSearched: true, searchKey: this.searchValue });
+    this.searchValue = '';
+  }
+
+  searchMovieQueryReset() {
+    this.movieService.movieSearch.next({ isMovieSearched: false, searchKey: '' });
   }
 }

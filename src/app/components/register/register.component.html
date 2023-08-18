@@ -208,45 +208,52 @@
   </div>
 </form>
 <ng-template #content let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title" *ngIf="error">
-      An unexpected error occured!
-    </h4>
-    <h4 class="modal-title" id="modal-basic-title" *ngIf="!error">Hi there!</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      *ngIf="error"
-      (click)="d('Cross click')"
-    ></button>
+  <div *ngIf="isLoading" style="text-align: center">
+    <app-loading-spinner></app-loading-spinner>
   </div>
-  <div *ngIf="error" class="modal-body">
-    <p>{{ error }}</p>
-  </div>
-  <div *ngIf="respRegisterData" class="modal-body">
-    <p>{{ respRegisterData.message }}</p>
-    <p>
-      Your LoginId:
-      <span style="color: blue">{{ respRegisterData.loginId }}</span>
-    </p>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      *ngIf="error"
-      class="btn btn-outline-dark"
-      (click)="c('Ok')"
-    >
-      Ok
-    </button>
-    <button
-      type="button"
-      *ngIf="respRegisterData"
-      class="btn btn-outline-success"
-      (click)="c('Ok') && regSuccess()"
-    >
-      Done
-    </button>
+  <div *ngIf="!isLoading">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title" *ngIf="error">
+        An unexpected error occured!
+      </h4>
+      <h4 class="modal-title" id="modal-basic-title" *ngIf="!error">
+        Hi there!
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        *ngIf="error"
+        (click)="d('Cross click')"
+      ></button>
+    </div>
+    <div *ngIf="error" class="modal-body">
+      <p>{{ error }}</p>
+    </div>
+    <div *ngIf="respRegisterData" class="modal-body">
+      <p>{{ respRegisterData.message }}</p>
+      <p>
+        Your LoginId:
+        <span style="color: blue">{{ respRegisterData.loginId }}</span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        *ngIf="error"
+        class="btn btn-outline-dark"
+        (click)="c('Ok')"
+      >
+        Ok
+      </button>
+      <button
+        type="button"
+        *ngIf="respRegisterData"
+        class="btn btn-outline-success"
+        (click)="regSuccess()"
+      >
+        Done
+      </button>
+    </div>
   </div>
 </ng-template>
