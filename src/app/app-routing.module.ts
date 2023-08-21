@@ -10,7 +10,7 @@ import { BookTicketComponent } from './components/book-ticket/book-ticket.compon
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: "movies", component: MovieListComponent },
+  { path: "movies", component: MovieListComponent, pathMatch: 'full' },
   { path: "add-movie", canActivate: [authGuard], component: AddMovieComponent },
   { path: "movies/:movieid/book-ticket", component: BookTicketComponent }
 ];

@@ -1,1 +1,135 @@
-<p>book-ticket works!</p>
+<form [formGroup]="bookTicketForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="bookMovieCard">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="movieName">Movie Name</label>
+          <input
+            id="movieName"
+            type="text"
+            formControlName="movieName"
+            class="form-control"
+            readonly
+          />
+          <!-- <div
+              class="invalid-feedback"
+              *ngIf="
+                rfControls['movieName'].touched && rfControls['movieName'].errors
+              "
+            >
+              <small *ngIf="rfControls['movieName'].errors['required']"
+                >This field is required!</small
+              >
+            </div> -->
+        </div>
+        <div class="form-group">
+          <label for="theatreName">Theatre Name</label>
+          <input
+            id="theatreName"
+            type="text"
+            formControlName="theatreName"
+            class="form-control"
+            readonly
+          />
+          <!-- <div
+              class="invalid-feedback"
+              *ngIf="
+                rfControls['theatreName'].touched &&
+                rfControls['theatreName'].errors
+              "
+            >
+              <small *ngIf="rfControls['theatreName'].errors['required']"
+                >This field is required!</small
+              >
+            </div> -->
+        </div>
+        <div class="form-group">
+          <label for="seats">Seat Capacity</label>
+          <input
+            id="seats"
+            type="number"
+            formControlName="seats"
+            class="form-control"
+            readonly
+          />
+          <!-- <div
+              class="invalid-feedback"
+              *ngIf="rfControls['seats'].touched && rfControls['seats'].errors"
+            >
+              <small *ngIf="rfControls['seats'].errors['required']"
+                >This field is required!</small
+              >
+              <small *ngIf="rfControls['seats'].errors['min']"
+                >Minimum 10 seats should be allocated!</small
+              >
+            </div> -->
+        </div>
+        <div class="form-group">
+          <label for="releaseDate">Release Date</label>
+          <input class="form-control" formControlName="releaseDate" readonly />
+        </div>
+        <div class="form-group">
+          <label for="seatCount">Seat Count</label>
+          <input
+            id="seatCount"
+            type="number"
+            formControlName="seatCount"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                btfControls['seatCount'].touched &&
+                btfControls['seatCount'].errors
+            }"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              btfControls['seatCount'].touched &&
+              btfControls['seatCount'].errors
+            "
+          >
+            <small *ngIf="btfControls['seatCount'].errors['required']"
+              >This field is required!</small
+            >
+            <small *ngIf="btfControls['seatCount'].errors['min']"
+              >Please Book minimum 1 seat to continue!</small
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="seatNumbers">Seat Count</label>
+          <input
+            id="seatNumbers"
+            type="text"
+            formControlName="seatNumbers"
+            class="form-control"
+            placeholder="Put the seat numbers separated with ',' like 2,3"
+            [ngClass]="{
+              'is-invalid':
+                btfControls['seatNumbers'].touched &&
+                btfControls['seatNumbers'].errors
+            }"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              btfControls['seatNumbers'].touched &&
+              btfControls['seatNumbers'].errors
+            "
+          >
+            <small *ngIf="btfControls['seatNumbers'].errors['required']"
+              >This field is required!</small
+            >
+            <small *ngIf="btfControls['seatNumbers'].errors['pattern']"
+              >Please enter the seat numbers separated with only ',' Ex-
+              2,3</small
+            >
+          </div>
+        </div>
+        <div class="form-group pt-2">
+          <button type="submit" class="btn btn-success">Book Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
