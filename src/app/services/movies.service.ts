@@ -11,7 +11,8 @@ export interface addMovie {
   movieName: string,
   theatreName: string,
   noOfTickets: number,
-  releaseDate: Date
+  releaseDate: Date,
+  movieId?: string
 }
 
 export interface addMovieRespData {
@@ -19,12 +20,6 @@ export interface addMovieRespData {
   createdBy: string
 }
 
-// export interface passToBookTicket{
-//   movieName: string,
-//   theatreName: string,
-//   noOfTickets: number,
-//   releaseDate:Date
-// }
 
 @Injectable({
   providedIn: 'root'

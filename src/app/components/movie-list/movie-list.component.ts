@@ -47,12 +47,12 @@ export class MovieListComponent implements OnInit, OnDestroy {
     })
   }
 
-  passToBookTicket(movieName: string, theatreName: string, noOfTickets: number, releaseDate: Date, content: any) {
+  passToBookTicket(movieName: string, theatreName: string, noOfTickets: number, releaseDate: Date, movieId: string, content: any) {
     if (!this.isLoggedIn) {
       this.modalService.open(content);
       return;
     }
-    const passToBookTicket: addMovie = { movieName, theatreName, noOfTickets, releaseDate };
+    const passToBookTicket: addMovie = { movieName, theatreName, noOfTickets, releaseDate, movieId };
     this.movieService.bookTicketReqData = passToBookTicket;
   }
 

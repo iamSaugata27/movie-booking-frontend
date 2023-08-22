@@ -1,4 +1,4 @@
-<form [formGroup]="bookTicketForm" (ngSubmit)="onSubmit()" class="form">
+<form [formGroup]="bookTicketForm" (ngSubmit)="onSubmit(content)" class="form">
   <div class="bookMovieCard">
     <div class="card">
       <div class="card-body">
@@ -11,16 +11,6 @@
             class="form-control"
             readonly
           />
-          <!-- <div
-              class="invalid-feedback"
-              *ngIf="
-                rfControls['movieName'].touched && rfControls['movieName'].errors
-              "
-            >
-              <small *ngIf="rfControls['movieName'].errors['required']"
-                >This field is required!</small
-              >
-            </div> -->
         </div>
         <div class="form-group">
           <label for="theatreName">Theatre Name</label>
@@ -31,17 +21,6 @@
             class="form-control"
             readonly
           />
-          <!-- <div
-              class="invalid-feedback"
-              *ngIf="
-                rfControls['theatreName'].touched &&
-                rfControls['theatreName'].errors
-              "
-            >
-              <small *ngIf="rfControls['theatreName'].errors['required']"
-                >This field is required!</small
-              >
-            </div> -->
         </div>
         <div class="form-group">
           <label for="seats">Seat Capacity</label>
@@ -52,17 +31,6 @@
             class="form-control"
             readonly
           />
-          <!-- <div
-              class="invalid-feedback"
-              *ngIf="rfControls['seats'].touched && rfControls['seats'].errors"
-            >
-              <small *ngIf="rfControls['seats'].errors['required']"
-                >This field is required!</small
-              >
-              <small *ngIf="rfControls['seats'].errors['min']"
-                >Minimum 10 seats should be allocated!</small
-              >
-            </div> -->
         </div>
         <div class="form-group">
           <label for="releaseDate">Release Date</label>
@@ -103,7 +71,7 @@
             type="text"
             formControlName="seatNumbers"
             class="form-control"
-            placeholder="Put the seat numbers separated with ',' like 2,3"
+            placeholder="Put the seat numbers separated with comma(,)"
             [ngClass]="{
               'is-invalid':
                 btfControls['seatNumbers'].touched &&
@@ -127,9 +95,62 @@
           </div>
         </div>
         <div class="form-group pt-2">
-          <button type="submit" class="btn btn-success">Book Now</button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="bookTicketForm.invalid"
+          >
+            Book Now
+          </button>
         </div>
       </div>
     </div>
   </div>
 </form>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div *ngIf="isLoading" style="text-align: center">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div *ngIf="!isLoading">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title" *ngIf="error">
+        An unexpected error occured!
+      </h4>
+      <h4 class="modal-title" id="modal-basic-title" *ngIf="!error">
+        Hi there!
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        *ngIf="error"
+        (click)="d('Cross click')"
+      ></button>
+    </div>
+    <div *ngIf="error" class="modal-body">
+      <p>{{ error }}</p>
+    </div>
+    <div *ngIf="bookTicketResponse" class="modal-body">
+      <p>{{ bookTicketResponse.message }}</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        *ngIf="error"
+        class="btn btn-outline-dark"
+        (click)="c('Ok')"
+      >
+        Ok
+      </button>
+      <button
+        type="button"
+        *ngIf="bookTicketResponse"
+        class="btn btn-outline-success"
+        (click)="ticketBooked()"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+</ng-template>
