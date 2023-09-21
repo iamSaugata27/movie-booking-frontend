@@ -1,0 +1,136 @@
+<div *ngIf="isLoading" style="text-align: center">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!isLoading">
+  <h3 *ngIf="error" style="color: red; padding-left: 84px">
+    An unexpected error occured! Please try again.
+  </h3>
+  <div class="pt-3">
+    <div class="card col-md-10 mx-auto">
+      <h2 class="card-header">All BingeWatch Users</h2>
+      <div class="card-body">
+        <div
+          *ngIf="getAllUsersDetails?.length === 0"
+          style="padding-left: 84px"
+        >
+          <h3 style="color: red">There is no users!</h3>
+        </div>
+        <table
+          class="table table-striped table-borderless"
+          *ngIf="getAllUsersDetails?.length"
+        >
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">LoginId</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col">Contact Number</th>
+              <th scope="col">Update Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let userInfo of getAllUsersDetails; index as i">
+              <th
+                scope="row"
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ loggedInUserId === userInfo.loginId ? "You" : i + 1 }}
+              </th>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ userInfo.loginId }}
+              </td>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ userInfo.firstname }}
+              </td>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ userInfo.lastname }}
+              </td>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ userInfo.email }}
+              </td>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ userInfo.role }}
+              </td>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                {{ userInfo.contactNumber }}
+              </td>
+              <td
+                [style.background-color]="
+                  loggedInUserId === userInfo.loginId ? 'yellow' : 'none'
+                "
+              >
+                <button
+                  [disabled]="userInfo.role === 'admin'"
+                  class="btn btn-outline-primary"
+                  (click)="makeAdmin(userInfo.loginId, content)"
+                >
+                  Make as Admin
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div *ngIf="isLoading" style="text-align: center">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div *ngIf="!isLoading">
+    <div *ngIf="error">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          An unexpected error occured!
+        </h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ error }}</p>
+      </div>
+    </div>
+    <div *ngIf="!error">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Hi there!</h4>
+      </div>
+      <div *ngIf="respText" class="modal-body">
+        <p>{{ respText }}</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Ok')">
+        Ok
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -33,11 +33,12 @@ export class LoginComponent implements OnInit {
     this.authService.login(loginDetails).subscribe({
       next: respData => {
         console.log(respData);
-        localStorage.setItem('role', respData.role);
-        localStorage.setItem('token', respData.token);
-        const user: User = { isLoggedIn: true, loginId: this.loginForm.value.loginId, role: respData.role };
-        this.authService.user.next(user);
-        this.authService.loggedIn(true);
+        // localStorage.setItem('role', respData.role);
+        // localStorage.setItem('token', respData.token);
+        // localStorage.setItem('loginId', respData.token);
+        // const user: User = { isLoggedIn: true, loginId: this.loginForm.value.loginId, role: respData.role };
+        // this.authService.user.next(user);
+        // this.authService.loggedIn(true);
         this.router.navigate(['/movies']);
       },
       error: errResp => {

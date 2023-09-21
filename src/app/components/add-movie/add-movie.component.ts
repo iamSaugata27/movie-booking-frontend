@@ -9,8 +9,6 @@ import { MoviesService, addMovie, addMovieRespData } from 'src/app/services/movi
   templateUrl: './add-movie.component.html',
   styleUrls: ['./add-movie.component.css'],
   providers: [NgbActiveModal]
-  // standalone: true,
-  // imports: [NgbDatepickerModule]
 })
 export class AddMovieComponent implements OnInit {
   model!: NgbDateStruct;

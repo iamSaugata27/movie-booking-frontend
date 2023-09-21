@@ -4,8 +4,8 @@
   (ngSubmit)="onSubmit(content)"
   class="form"
 >
-  <div class="loginCard">
-    <div class="card">
+  <div class="p-5">
+    <div class="card col-md-4 offset-4">
       <div class="card-body">
         <div class="form-group">
           <label for="loginId">LoginId</label>
@@ -56,11 +56,18 @@
         <div class="form-group pt-2">
           <button
             type="submit"
-            class="btn btn-success"
+            style="color: blue"
+            class="btn btn-warning"
             [disabled]="loginForm.invalid"
           >
-            Login
+            Login Now
           </button>
+          <a
+            [routerLink]="['/', 'forgot-password']"
+            class="ps-lg-5 ms-4"
+            style="color: blue; text-decoration: none"
+            >Forgot Password?</a
+          >
         </div>
       </div>
     </div>

@@ -69,6 +69,6 @@ export class BookTicketComponent implements OnInit {
 
   ticketBooked() {
     this.modalRef.close();
-    this.router.navigate(['/movies']);
+    this.router.navigate(['/mybookings']);
   }
 }

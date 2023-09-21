@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MoviesService } from './movies.service';
+import { environment } from 'src/environments/environment.development';
 
 export interface bookTicketRespData {
   success: boolean,
@@ -11,6 +12,14 @@ export interface bookTicketRespData {
 export interface bookTicketReqData {
   seatCount: number,
   seatNumbers: string
+}
+
+export interface myBookings {
+  movieName: string,
+  theatreName: string,
+  releaseDate: Date,
+  loginId: string,
+  bookedSeats: number[]
 }
 
 @Injectable({
@@ -23,8 +32,10 @@ export class TicketsService {
   bookTicket(reqTicket: bookTicketReqData): Observable<bookTicketRespData> {
     const moviename = this.movieService.bookTicketReqData.movieName;
     const movieId = this.movieService.bookTicketReqData.movieId;
-    return this.http.post<bookTicketRespData>(`http://localhost:8000/api/${moviename}/add/${movieId}`, reqTicket, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
+    return this.http.post<bookTicketRespData>(`${environment.BASE_URL}/${moviename}/add/${movieId}`, reqTicket);
+  }
+
+  getBookedTickets(): Observable<myBookings[]> {
+    return this.http.get<myBookings[]>(`${environment.BASE_URL}/bookedtickets`);
   }
 }

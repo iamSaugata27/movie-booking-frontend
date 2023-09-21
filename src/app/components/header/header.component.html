@@ -1,35 +1,4 @@
 <ul ngbNav #nav="ngbNav" [activeId]="2" class="nav-tabs justify-content-center">
-  <!-- <li [ngbNavItem]="home">
-    <a ngbNavLink [routerLink]="home">Home</a>
-    <button ngbNavLink>Home</button>
-    <ng-template ngbNavContent>
-      <p>
-        Raw denim you probably haven't heard of them jean shorts Austin.
-        Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache
-        cliche tempor, williamsburg carles vegan helvetica. Reprehenderit
-        butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui
-        irure terry richardson ex squid. Aliquip placeat salvia cillum iphone.
-        Seitan aliquip quis cardigan american apparel, butcher voluptate nisi
-        qui.
-      </p>
-    </ng-template>
-  </li> -->
-  <!-- <li [ngbNavItem]="2">
-    <button ngbNavLink>Fancy title</button>
-    <ng-template ngbNavContent>
-      <p>
-        Exercitation +1 labore velit, blog sartorial PBR leggings next level wes
-        anderson artisan four loko farm-to-table craft beer twee. Qui photo
-        booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-        ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore
-        aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero
-        magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-        anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry
-        richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
-        sint qui sapiente accusamus tattooed echo park.
-      </p>
-    </ng-template>
-  </li> -->
   <li *ngIf="isLoggedIn" ngbDropdown class="nav-item" role="presentation">
     <button type="button" class="nav-link" ngbDropdownToggle>
       Welcome {{ loginId }}
@@ -39,28 +8,45 @@
         ngbDropdownItem
         [routerLink]="addMovie"
         [routerLinkActive]="['active']"
-        *ngIf="role == 'admin'"
+        *ngIf="isLoggedIn && role == 'admin'"
         >Add Movie Poster</a
       >
-      <button ngbDropdownItem>Another action</button>
-      <button ngbDropdownItem>Something else here</button>
+      <a
+        *ngIf="isLoggedIn"
+        ngbDropdownItem
+        [routerLink]="['mybookings']"
+        [routerLinkActive]="['active']"
+        >My Bookings</a
+      >
+      <a
+        ngbDropdownItem
+        [routerLink]="['users']"
+        [routerLinkActive]="['active']"
+        *ngIf="isLoggedIn && role == 'admin'"
+        >All Users</a
+      >
       <div class="dropdown-divider"></div>
       <button ngbDropdownItem (click)="loggingOut()">Logout</button>
     </div>
   </li>
-  <!-- <li [ngbNavItem]="movies">
-    <a ngbNavLink [routerLink]="movies" [routerLinkActive]="['active']"
-      >Movies</a
-    >
-  </li> -->
-  <ng-container *ngFor="let link of links">
-    <li [ngbNavItem]="link.route" *ngIf="!link.afterLoginDisable">
+  <ng-container>
+    <li [ngbNavItem]="['movies']">
       <a
         ngbNavLink
-        [routerLink]="link.route"
+        [routerLink]="['movies']"
         [routerLinkActive]="['active']"
         (click)="searchMovieQueryReset()"
-        >{{ link.title }}</a
+        >Movies</a
+      >
+    </li>
+    <li [ngbNavItem]="['login']" *ngIf="!isLoggedIn">
+      <a ngbNavLink [routerLink]="['login']" [routerLinkActive]="['active']">
+        login</a
+      >
+    </li>
+    <li [ngbNavItem]="['register']" *ngIf="!isLoggedIn">
+      <a ngbNavLink [routerLink]="['register']" [routerLinkActive]="['active']">
+        Register</a
       >
     </li>
   </ng-container>

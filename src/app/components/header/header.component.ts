@@ -1,14 +1,15 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNav, NgbNavItem } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService, User } from 'src/app/services/auth.service';
 import { MoviesService } from 'src/app/services/movies.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
+  providers: [NgbNavItem, NgbNav]
 })
 export class HeaderComponent implements OnInit {
   @ViewChild(NgbNav, { static: true })
@@ -20,11 +21,7 @@ export class HeaderComponent implements OnInit {
   searchValue!: string;
   addMovie = "add-movie";
 
-  links = [
-    { title: 'Movies', route: 'movies', afterLoginDisable: false },
-    { title: 'login', route: 'login', afterLoginDisable: false },
-    { title: 'Register', route: 'register', afterLoginDisable: false }
-  ];
+
   constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private movieService: MoviesService) { }
   ngOnInit(): void {
     this.route.firstChild?.url.subscribe((url) => {
@@ -42,22 +39,12 @@ export class HeaderComponent implements OnInit {
       this.isLoggedIn = userData.isLoggedIn;
       this.loginId = userData.loginId;
       this.role = userData.role;
-      if (this.isLoggedIn) {
-        for (let link of this.links) {
-          if (link.title !== 'Movies')
-            link.afterLoginDisable = true;
-        }
-      }
     })
   }
 
   loggingOut() {
     this.authService.logout();
-    for (let link of this.links) {
-      if (link.afterLoginDisable)
-        link.afterLoginDisable = false;
-    }
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
   }
 
   searchMovie() {

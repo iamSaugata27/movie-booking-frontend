@@ -9,38 +9,54 @@
     Your searched results consist moviename with
     <b style="font-style: italic">{{ searchKey }}</b> keyword.
   </p>
-  <h3
+  <div
     *ngIf="isMovieSearched && movies?.length === 0"
-    style="color: red; padding-left: 84px"
+    style="padding-left: 84px"
   >
-    No movies matched with your search results!
-  </h3>
+    <h3 style="color: red">No movies matched with your search results!</h3>
+    <a
+      class="btn btn-outline-primary"
+      [routerLink]="[]"
+      (click)="searchMovieQueryReset()"
+      >Back to Movies</a
+    >
+  </div>
   <table class="table table-striped" *ngIf="movies?.length">
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Movie</th>
-        <th scope="col">Theatre</th>
-        <th scope="col">Capacity</th>
-        <th scope="col">SeatsBooked</th>
-        <th scope="col">Release On</th>
-        <th scope="col">Book Ticket</th>
-        <th scope="col">BookingStatus</th>
+        <th class="text-center" scope="col">Movie</th>
+        <th class="text-center" scope="col">Theatre</th>
+        <th class="text-center" scope="col">Capacity</th>
+        <th class="text-center" scope="col">SeatsBooked</th>
+        <th class="text-center" scope="col">Release On</th>
+        <th class="text-center" scope="col">Book Ticket</th>
+        <th class="text-center" scope="col">BookingStatus</th>
+        <th *ngIf="role === 'admin'" class="text-center" scope="col">
+          Delete Movie
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let movie of movies; index as i">
         <th scope="row">{{ i + 1 }}</th>
-        <td>{{ movie.movieName }}</td>
-        <td>{{ movie.theatreName }}</td>
-        <td>{{ movie.noOfTickets | number }}</td>
-        <td>{{ movie.seatNumber.length | number }}</td>
-        <td>{{ movie.releaseDate | date : "MMMM dd" }}</td>
-        <td>
+        <td class="text-center">{{ movie.movieName }}</td>
+        <td class="text-center">{{ movie.theatreName }}</td>
+        <td class="text-center">{{ movie.noOfTickets | number }}</td>
+        <td class="text-center">{{ movie.seatNumber.length | number }}</td>
+        <td class="text-center">{{ movie.releaseDate | date : "MMMM dd" }}</td>
+        <td class="text-center">
           <a
-            class="btn btn-outline-success"
+            class="btn"
+            [class.btn-outline-success]="
+              movie.noOfTickets != movie.seatNumber.length
+            "
             [routerLink]="[movie.movieName, 'book-ticket']"
             [routerLinkActive]="['active']"
+            [class.disabled]="movie.noOfTickets == movie.seatNumber.length"
+            [class.btn-outline-dark]="
+              movie.noOfTickets == movie.seatNumber.length
+            "
             (click)="
               passToBookTicket(
                 movie.movieName,
@@ -55,7 +71,27 @@
             Book Now
           </a>
         </td>
-        <td>{{ movie.status }}</td>
+        <td class="text-center">
+          {{ movie.status }}
+          <hr *ngIf="role === 'admin'" />
+          <button
+            class="btn btn-primary btn-sm"
+            *ngIf="role === 'admin'"
+            (click)="
+              updateBookingStatus(movie.movieName, movie._id, upDelContent)
+            "
+          >
+            Update Status
+          </button>
+        </td>
+        <td class="text-center" *ngIf="role === 'admin'">
+          <button
+            class="btn btn-outline-danger"
+            (click)="deleteMovie(movie.movieName, movie._id, upDelContent)"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -63,12 +99,6 @@
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Hi there!</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="d('Cross click')"
-    ></button>
   </div>
   <div class="modal-body">
     <p>Dear Guest, You have to login first to book a ticket.</p>
@@ -77,5 +107,37 @@
     <button type="button" class="btn btn-outline-dark" (click)="c('Ok')">
       Ok
     </button>
+  </div>
+</ng-template>
+
+<ng-template #upDelContent let-c="close" let-d="dismiss">
+  <div *ngIf="isActionLoading" style="text-align: center">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div *ngIf="!isActionLoading">
+    <div *ngIf="error" class="modal-body">
+      <p>{{ error }}</p>
+    </div>
+    <div *ngIf="!error" class="modal-body">
+      <p>{{ upDelTicktResp }}</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        *ngIf="error"
+        class="btn btn-outline-dark"
+        (click)="c('Ok')"
+      >
+        Ok
+      </button>
+      <button
+        type="button"
+        *ngIf="!error"
+        class="btn btn-outline-success"
+        (click)="loadMoviesAfterUpDel()"
+      >
+        Done
+      </button>
+    </div>
   </div>
 </ng-template>
