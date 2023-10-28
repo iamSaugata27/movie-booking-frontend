@@ -55,7 +55,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(loginDetails: LoginDetails): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>("http://localhost:8000/api/users/login", loginDetails).pipe(
+    return this.http.post<LoginResponse>(`${environment.BASE_URL}/users/login`, loginDetails).pipe(
       tap((respData: LoginResponse) => {
         localStorage.setItem('token', respData.token);
         this.user.next(this.getPayloadsFromToken(respData.token));
@@ -87,7 +87,7 @@ export class AuthService {
   }
 
   register(registrationDetails: RegistrationData): Observable<RegistrationRespData> {
-    return this.http.post<RegistrationRespData>(`${environment.BASE_URL}/registration`, registrationDetails);
+    return this.http.post<RegistrationRespData>(`${environment.BASE_URL}/users/registration`, registrationDetails);
   }
 
   sendOTP(userIdentity: string): Observable<{ message: string, loginId: string }> {
